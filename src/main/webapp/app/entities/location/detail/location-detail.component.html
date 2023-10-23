@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="location">
+      <h2 data-cy="locationDetailsHeading">
+        <span jhiTranslate="spcpfasimpleApp.location.detail.title">__jhiTransformTranslate__('spcpfasimpleApp.location.detail.title')</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">__jhiTransformTranslate__('global.field.id')</span></dt>
+        <dd>
+          <span>{{ location.id }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="spcpfasimpleApp.location.streetAddress"
+            >__jhiTransformTranslate__('spcpfasimpleApp.location.streetAddress')</span
+          >
+        </dt>
+        <dd>
+          <span>{{ location.streetAddress }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="spcpfasimpleApp.location.postalCode">__jhiTransformTranslate__('spcpfasimpleApp.location.postalCode')</span>
+        </dt>
+        <dd>
+          <span>{{ location.postalCode }}</span>
+        </dd>
+        <dt><span jhiTranslate="spcpfasimpleApp.location.city">__jhiTransformTranslate__('spcpfasimpleApp.location.city')</span></dt>
+        <dd>
+          <span>{{ location.city }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="spcpfasimpleApp.location.stateProvince"
+            >__jhiTransformTranslate__('spcpfasimpleApp.location.stateProvince')</span
+          >
+        </dt>
+        <dd>
+          <span>{{ location.stateProvince }}</span>
+        </dd>
+        <dt><span jhiTranslate="spcpfasimpleApp.location.country">__jhiTransformTranslate__('spcpfasimpleApp.location.country')</span></dt>
+        <dd>
+          <div *ngIf="location.country">
+            <a [routerLink]="['/country', location.country.id, 'view']">{{ location.country.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"
+          >__jhiTransformTranslate__('entity.action.back')</span
+        >
+      </button>
+
+      <button type="button" [routerLink]="['/location', location.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"
+          >__jhiTransformTranslate__('entity.action.edit')</span
+        >
+      </button>
+    </div>
+  </div>
+</div>

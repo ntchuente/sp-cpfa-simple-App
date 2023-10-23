@@ -1,0 +1,59 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="job">
+      <h2 data-cy="jobDetailsHeading">
+        <span jhiTranslate="spcpfasimpleApp.job.detail.title">__jhiTransformTranslate__('spcpfasimpleApp.job.detail.title')</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">__jhiTransformTranslate__('global.field.id')</span></dt>
+        <dd>
+          <span>{{ job.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="spcpfasimpleApp.job.jobTitle">__jhiTransformTranslate__('spcpfasimpleApp.job.jobTitle')</span></dt>
+        <dd>
+          <span>{{ job.jobTitle }}</span>
+        </dd>
+        <dt><span jhiTranslate="spcpfasimpleApp.job.minSalary">__jhiTransformTranslate__('spcpfasimpleApp.job.minSalary')</span></dt>
+        <dd>
+          <span>{{ job.minSalary }}</span>
+        </dd>
+        <dt><span jhiTranslate="spcpfasimpleApp.job.maxSalary">__jhiTransformTranslate__('spcpfasimpleApp.job.maxSalary')</span></dt>
+        <dd>
+          <span>{{ job.maxSalary }}</span>
+        </dd>
+        <dt><span jhiTranslate="spcpfasimpleApp.job.task">__jhiTransformTranslate__('spcpfasimpleApp.job.task')</span></dt>
+        <dd>
+          <span *ngFor="let task of job.tasks; let last = last">
+            <a [routerLink]="['/task', task.id, 'view']">{{ task.title }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span jhiTranslate="spcpfasimpleApp.job.employee">__jhiTransformTranslate__('spcpfasimpleApp.job.employee')</span></dt>
+        <dd>
+          <div *ngIf="job.employee">
+            <a [routerLink]="['/employee', job.employee.id, 'view']">{{ job.employee.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"
+          >__jhiTransformTranslate__('entity.action.back')</span
+        >
+      </button>
+
+      <button type="button" [routerLink]="['/job', job.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"
+          >__jhiTransformTranslate__('entity.action.edit')</span
+        >
+      </button>
+    </div>
+  </div>
+</div>
