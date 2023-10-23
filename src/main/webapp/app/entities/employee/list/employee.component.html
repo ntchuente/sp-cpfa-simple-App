@@ -1,0 +1,169 @@
+<div>
+  <h2 id="page-heading" data-cy="EmployeeHeading">
+    <span jhiTranslate="spcpfasimpleApp.employee.home.title">__jhiTransformTranslate__('spcpfasimpleApp.employee.home.title')</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="spcpfasimpleApp.employee.home.refreshListLabel"
+          >__jhiTransformTranslate__('spcpfasimpleApp.employee.home.refreshListLabel')</span
+        >
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-employee"
+        [routerLink]="['/employee/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="spcpfasimpleApp.employee.home.createLabel"
+          >__jhiTransformTranslate__('spcpfasimpleApp.employee.home.createLabel')</span
+        >
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="employees?.length === 0">
+    <span jhiTranslate="spcpfasimpleApp.employee.home.notFound">__jhiTransformTranslate__('spcpfasimpleApp.employee.home.notFound')</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="employees && employees.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">__jhiTransformTranslate__('global.field.id')</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="firstName">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.employee.firstName">__jhiTransformTranslate__('spcpfasimpleApp.employee.firstName')</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="lastName">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.employee.lastName">__jhiTransformTranslate__('spcpfasimpleApp.employee.lastName')</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="email">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.employee.email">__jhiTransformTranslate__('spcpfasimpleApp.employee.email')</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="phoneNumber">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.employee.phoneNumber"
+                >__jhiTransformTranslate__('spcpfasimpleApp.employee.phoneNumber')</span
+              >
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="hireDate">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.employee.hireDate">__jhiTransformTranslate__('spcpfasimpleApp.employee.hireDate')</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="salary">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.employee.salary">__jhiTransformTranslate__('spcpfasimpleApp.employee.salary')</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="commissionPct">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.employee.commissionPct"
+                >__jhiTransformTranslate__('spcpfasimpleApp.employee.commissionPct')</span
+              >
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="manager.id">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.employee.manager">__jhiTransformTranslate__('spcpfasimpleApp.employee.manager')</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="department.id">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.employee.department"
+                >__jhiTransformTranslate__('spcpfasimpleApp.employee.department')</span
+              >
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody
+        infinite-scroll
+        (scrolled)="loadPage(page + 1)"
+        [infiniteScrollDisabled]="page - 1 >= links['last']"
+        [infiniteScrollDistance]="0"
+      >
+        <tr *ngFor="let employee of employees; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/employee', employee.id, 'view']">{{ employee.id }}</a>
+          </td>
+          <td>{{ employee.firstName }}</td>
+          <td>{{ employee.lastName }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.phoneNumber }}</td>
+          <td>{{ employee.hireDate | formatMediumDatetime }}</td>
+          <td>{{ employee.salary }}</td>
+          <td>{{ employee.commissionPct }}</td>
+          <td>
+            <div *ngIf="employee.manager">
+              <a [routerLink]="['/employee', employee.manager.id, 'view']">{{ employee.manager.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="employee.department">
+              <a [routerLink]="['/department', employee.department.id, 'view']">{{ employee.department.id }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/employee', employee.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">__jhiTransformTranslate__('entity.action.view')</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/employee', employee.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">__jhiTransformTranslate__('entity.action.edit')</span>
+              </button>
+
+              <button type="submit" (click)="delete(employee)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete"
+                  >__jhiTransformTranslate__('entity.action.delete')</span
+                >
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

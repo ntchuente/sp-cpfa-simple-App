@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="jobHistory">
+      <h2 data-cy="jobHistoryDetailsHeading">
+        <span jhiTranslate="spcpfasimpleApp.jobHistory.detail.title"
+          >__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.detail.title')</span
+        >
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">__jhiTransformTranslate__('global.field.id')</span></dt>
+        <dd>
+          <span>{{ jobHistory.id }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="spcpfasimpleApp.jobHistory.startDate">__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.startDate')</span>
+        </dt>
+        <dd>
+          <span>{{ jobHistory.startDate | formatMediumDatetime }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="spcpfasimpleApp.jobHistory.endDate">__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.endDate')</span>
+        </dt>
+        <dd>
+          <span>{{ jobHistory.endDate | formatMediumDatetime }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="spcpfasimpleApp.jobHistory.language">__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.language')</span>
+        </dt>
+        <dd>
+          <span jhiTranslate="{{ 'spcpfasimpleApp.Language.' + jobHistory.language }}">{{ jobHistory.language }}</span>
+        </dd>
+        <dt><span jhiTranslate="spcpfasimpleApp.jobHistory.job">__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.job')</span></dt>
+        <dd>
+          <div *ngIf="jobHistory.job">
+            <a [routerLink]="['/job', jobHistory.job.id, 'view']">{{ jobHistory.job.id }}</a>
+          </div>
+        </dd>
+        <dt>
+          <span jhiTranslate="spcpfasimpleApp.jobHistory.department"
+            >__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.department')</span
+          >
+        </dt>
+        <dd>
+          <div *ngIf="jobHistory.department">
+            <a [routerLink]="['/department', jobHistory.department.id, 'view']">{{ jobHistory.department.id }}</a>
+          </div>
+        </dd>
+        <dt>
+          <span jhiTranslate="spcpfasimpleApp.jobHistory.employee">__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.employee')</span>
+        </dt>
+        <dd>
+          <div *ngIf="jobHistory.employee">
+            <a [routerLink]="['/employee', jobHistory.employee.id, 'view']">{{ jobHistory.employee.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"
+          >__jhiTransformTranslate__('entity.action.back')</span
+        >
+      </button>
+
+      <button type="button" [routerLink]="['/job-history', jobHistory.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"
+          >__jhiTransformTranslate__('entity.action.edit')</span
+        >
+      </button>
+    </div>
+  </div>
+</div>

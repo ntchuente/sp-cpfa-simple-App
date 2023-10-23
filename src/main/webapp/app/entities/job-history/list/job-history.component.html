@@ -1,0 +1,156 @@
+<div>
+  <h2 id="page-heading" data-cy="JobHistoryHeading">
+    <span jhiTranslate="spcpfasimpleApp.jobHistory.home.title">__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.home.title')</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="spcpfasimpleApp.jobHistory.home.refreshListLabel"
+          >__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.home.refreshListLabel')</span
+        >
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-job-history"
+        [routerLink]="['/job-history/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="spcpfasimpleApp.jobHistory.home.createLabel"
+          >__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.home.createLabel')</span
+        >
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="jobHistories?.length === 0">
+    <span jhiTranslate="spcpfasimpleApp.jobHistory.home.notFound"
+      >__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.home.notFound')</span
+    >
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="jobHistories && jobHistories.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">__jhiTransformTranslate__('global.field.id')</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="startDate">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.jobHistory.startDate"
+                >__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.startDate')</span
+              >
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="endDate">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.jobHistory.endDate">__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.endDate')</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="language">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.jobHistory.language"
+                >__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.language')</span
+              >
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="job.id">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.jobHistory.job">__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.job')</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="department.id">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.jobHistory.department"
+                >__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.department')</span
+              >
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="employee.id">
+            <div class="d-flex">
+              <span jhiTranslate="spcpfasimpleApp.jobHistory.employee"
+                >__jhiTransformTranslate__('spcpfasimpleApp.jobHistory.employee')</span
+              >
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody
+        infinite-scroll
+        (scrolled)="loadPage(page + 1)"
+        [infiniteScrollDisabled]="page - 1 >= links['last']"
+        [infiniteScrollDistance]="0"
+      >
+        <tr *ngFor="let jobHistory of jobHistories; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/job-history', jobHistory.id, 'view']">{{ jobHistory.id }}</a>
+          </td>
+          <td>{{ jobHistory.startDate | formatMediumDatetime }}</td>
+          <td>{{ jobHistory.endDate | formatMediumDatetime }}</td>
+          <td jhiTranslate="{{ 'spcpfasimpleApp.Language.' + jobHistory.language }}">{{ jobHistory.language }}</td>
+          <td>
+            <div *ngIf="jobHistory.job">
+              <a [routerLink]="['/job', jobHistory.job.id, 'view']">{{ jobHistory.job.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="jobHistory.department">
+              <a [routerLink]="['/department', jobHistory.department.id, 'view']">{{ jobHistory.department.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="jobHistory.employee">
+              <a [routerLink]="['/employee', jobHistory.employee.id, 'view']">{{ jobHistory.employee.id }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/job-history', jobHistory.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">__jhiTransformTranslate__('entity.action.view')</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/job-history', jobHistory.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">__jhiTransformTranslate__('entity.action.edit')</span>
+              </button>
+
+              <button type="submit" (click)="delete(jobHistory)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete"
+                  >__jhiTransformTranslate__('entity.action.delete')</span
+                >
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
